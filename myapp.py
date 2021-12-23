@@ -84,4 +84,4 @@ def forward_propagation(Input_Sample,kernel,bias,config):
   return lin
 if __name__ == "__main__":
 	os.environ['FLASK_ENV'] = 'development' 
-	app.run(debug=True)
+	app.run(debug=False)
