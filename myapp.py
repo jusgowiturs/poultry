@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template,request
 #print("Code executed successfully FLASK")
 import librosa
@@ -6,7 +7,7 @@ import tensorflow as tf
 from model_weight import model_weights,configuration
 import json
 import h5py
-import os
+
 
 app = Flask(__name__)
 
