@@ -7,4 +7,4 @@ gunicorn == 19.9.0
 Werkzeug == 0.15.5
 librosa == 0.8.0
 h5py == 3.6.0
-libsndfile1 ==1.0.28
+
