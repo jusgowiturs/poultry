@@ -19,6 +19,28 @@ FileName = './model-001-0.541899.h5'
 
 #FileName = './model-007-0.413408.h5'
 #FileName = './model-001-0.815760.h5'
+
+
+def linear_reg(Input,Weight,Bias):
+  return np.dot(Input,Weight)+Bias
+def relu(Input):
+  return np.maximum(Input,0)
+def sigmoid(Input):
+  return 1.0/(1 + np.exp(-Input))
+def softmax(Input):
+  return np.exp(Input) / np.sum(np.exp(Input), axis=1)
+  
+def forward_propagation(Input_Sample,kernel,bias,config):
+  lin = Input_Sample
+  for layer in kernel:
+    #print(layer)
+    lin = linear_reg(lin,kernel[layer],bias[layer])
+    if config[layer] == 'relu':
+      lin = relu(lin)
+    if config[layer] == 'softmax':
+      lin = softmax(lin)
+  return lin
+
 @app.route("/")
 def hello():
 	print("Hello function execting")
@@ -64,25 +86,7 @@ def submit():
 			State = "Unknown State Manual checking is required"
 	return render_template("sub.html",statement = State)
 	#return render_template("sub.html",statement = State)
-def linear_reg(Input,Weight,Bias):
-  return np.dot(Input,Weight)+Bias
-def relu(Input):
-  return np.maximum(Input,0)
-def sigmoid(Input):
-  return 1.0/(1 + np.exp(-Input))
-def softmax(Input):
-  return np.exp(Input) / np.sum(np.exp(Input), axis=1)
-  
-def forward_propagation(Input_Sample,kernel,bias,config):
-  lin = Input_Sample
-  for layer in kernel:
-    #print(layer)
-    lin = linear_reg(lin,kernel[layer],bias[layer])
-    if config[layer] == 'relu':
-      lin = relu(lin)
-    if config[layer] == 'softmax':
-      lin = softmax(lin)
-  return lin
+
 if __name__ == "__main__":
 	#os.environ['FLASK_ENV'] = 'development' 
 	app.run(debug=False)
