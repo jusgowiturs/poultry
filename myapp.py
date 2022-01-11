@@ -1,13 +1,11 @@
+import os
 from flask import Flask, render_template,request
-#print("Code executed successfully FLASK")
 import librosa
 import numpy as np
-import tensorflow as tf
-from model_weight import model_weights,configuration
 import json
 import h5py
-import os
-
+###from model_weight import model_weights,configuration
+### Check model_weight installed or not in heroku
 app = Flask(__name__)
 
 #model = tf.keras.models.load_model("./model-001-0.815760.h5")
@@ -82,6 +80,38 @@ def forward_propagation(Input_Sample,kernel,bias,config):
     if config[layer] == 'softmax':
       lin = softmax(lin)
   return lin
+  
+  
+
+def model_weights(model):
+  f1 = h5py.File(model,"r+")
+  model,optimizer = list(f1)
+  layers = list(f1[model])
+  layers = [layer for layer in layers if "dense" in layer]
+#  print("Layers",layers)
+  #sub_layer = list(f1[model][layers[0]])
+  #print(sub_layer)
+  bias = {}
+  kernel = {}
+  for i in range(len(layers)):
+  #  print(f1[model][layers[i]][layers[i]]['bias:0'][:])
+    bias[layers[i]]=f1[model][layers[i]][layers[i]]['bias:0'][:]
+    kernel[layers[i]] = f1[model][layers[i]][layers[i]]['kernel:0'][:]
+#  bias = np.array(bias)
+#  kernel = np.array(kernel)
+  return (bias,kernel)
+
+
+def configuration(model):
+  f1 = h5py.File(model,"r+")
+  model_configuration = f1.attrs.get('model_config')
+  #print(model_configuration)
+  model_configuration = json.loads(model_configuration)
+  activation = {}
+  for i in range(len(model_configuration["config"]["layers"])):
+    if model_configuration["config"]["layers"][i]["class_name"] == "Dense":
+      activation[model_configuration["config"]["layers"][i]['config']['name']] = model_configuration["config"]["layers"][i]['config']['activation']
+  return activation
 if __name__ == "__main__":
 	os.environ['FLASK_ENV'] = 'development' 
 	app.run(debug=False)
