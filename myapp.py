@@ -6,7 +6,7 @@ import json
 import h5py
 ###from model_weight import model_weights,configuration
 ### Check model_weight installed or not in heroku
-app = Flask(__name__)
+myapp = Flask(__name__)
 
 #model = tf.keras.models.load_model("./model-001-0.815760.h5")
 #model = tf.keras.models.load_model('./model-001-0.541899.h5')
@@ -117,4 +117,4 @@ def submit():
 
 if __name__ == "__main__":
 	os.environ['FLASK_ENV'] = 'development' 
-	app.run(debug=False)
+	myapp.run(debug=False)
